@@ -1,0 +1,160 @@
+.el-button {
+  display: inline-block;
+  margin: 0;
+  box-sizing: border-box;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  padding: 12px 20px;
+
+  font-size: 14px;
+  text-align: center;
+  line-height: 1;
+  color: #606266;
+  background: #fff;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-appearance: none;
+  outline: 0;
+
+  +& {
+    margin-left: 10px;
+  }
+
+  &:focus,
+  &:hover {
+    color: #409eff;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
+  }
+
+  &:active {
+    color: #3a8ee6;
+    border-color: #3a8ee6;
+    outline: 0
+  }
+
+  &.is-disabled{
+    color: #c0c4cc;
+    cursor: not-allowed;
+    background-image: none;
+    background-color: #fff;
+    border-color: #ebeef5;
+
+    &:focus,
+    &:hover {
+      color: #c0c4cc;
+      cursor: not-allowed;
+      background-image: none;
+      background-color: #fff;
+      border-color: #ebeef5
+    }
+    &.el-button--text {
+      background-color: transparent;
+    }
+  }
+
+  &.is-circle {
+    border-radius: 100%;
+    padding: 12px;
+  }
+
+  &.is-round {
+    border-radius: 20px;
+    padding: 12px 23px
+  }
+}
+
+.el-button--primary {
+  color: #FFF;
+  background-color: #409EFF;
+  border-color: #409EFF;
+
+  &.is-active,
+  &:active {
+    background: #3a8ee6;
+    border-color: #3a8ee6;
+    color: #FFF
+  }
+  &:active {
+    outline: 0;
+  }
+
+  &.is-disabled,
+  &.is-disabled:active,
+  &.is-disabled:focus,
+  &.is-disabled:hover {
+    color: #FFF;
+    background-color: #a0cfff;
+    border-color: #a0cfff
+  }
+
+}
+
+.el-button--text,
+.el-button--text.is-disabled,
+.el-button--text.is-disabled:focus,
+.el-button--text.is-disabled:hover,
+.el-button--text:active {
+  border-color: transparent
+}
+
+.el-button--medium {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+
+  &.is-round {
+    padding: 10px 20px;
+  }
+
+  &.is-circle {
+    padding: 10px;
+  }
+}
+
+.el-button--mini,
+.el-button--small {
+  font-size: 12px;
+  border-radius: 3px
+}
+
+.el-button--small {
+  padding: 9px 15px;
+
+  &.is-round {
+    padding: 9px 15px;
+  }
+
+  &.is-circle {
+    padding: 9px;
+  }
+}
+
+.el-button--mini {
+  padding: 7px 15px;
+  &.is-round {
+    padding: 7px 15px
+  }
+  &.is-circle {
+    padding: 7px
+  }
+}
+
+.el-button--text {
+  color: #409EFF;
+  background: 0 0;
+  padding-left: 0;
+  padding-right: 0;
+
+  &:focus,
+  &:hover {
+    color: #66b1ff;
+    border-color: transparent;
+    background-color: transparent
+  }
+
+  &:active {
+    color: #3a8ee6;
+    background-color: transparent
+  }
+}
