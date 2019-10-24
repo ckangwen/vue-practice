@@ -9,9 +9,9 @@
       v-for="(item, key) in max"
       :key="key"
       :style="{ cursor: rateDisabled ? 'auto' : 'pointer'}"
-      @click="selectValue(item)"
-      @mousemove="setCurrentValue(item, $event)"
-      @mouseleave="resetCurrentValue">
+      @click="onclickHandler(item)"
+      @mousemove="onMousemoveHandler(item, $event)"
+      @mouseleave="onMouseleaveHandler">
         <i
           class="el-rate__icon"
           :class="[
@@ -51,31 +51,27 @@ export default {
       type: Number,
       default: 0
     },
-    lowTreshold: {
-      type: Number,
-      default: 2
-    },
-    highTreshold: {
-      type: Number,
-      default: 4
-    },
     voidColor: {
       type: String,
       default: '#C6D1DE'
     },
+    activeColor: {
+      type: String,
+      default: '#F7BA2A'
+    },
     disabledVoidColor: {
       type: String,
       default: '#EFF2F7'
+    },
+    disableActiveColor: {
+      type: String,
+      default: '#F7BA2A'
     },
     iconClasses: {
       type: [Array, Object],
       default() {
         return ['el-icon-star-on', 'el-icon-star-on', 'el-icon-star-on']
       }
-    },
-    voidIconClass: {
-      type: String,
-      default: 'el-icon-star-off'
     },
     disabledVoidIconClass: {
       type: String,
@@ -84,6 +80,10 @@ export default {
     activeIconClass: {
       type: String,
       default: 'el-icon-star-on'
+    },
+    voidIconClass: {
+      type: String,
+      default: 'el-icon-star-off'
     },
     disabled: {
       type: Boolean,
@@ -114,10 +114,6 @@ export default {
     scoreTemplate: {
       type: String,
       default: '{value}'
-    },
-    activeColor: {
-      type: String,
-      default: '#F7BA2A'
     }
   },
   data() {
@@ -149,55 +145,35 @@ export default {
         threshold--
       }
       for (; i < threshold; i++) {
-        result.push(this.activeClass)
+        result.push(this.activeIconClass)
       }
       for (; i < this.max; i++) {
-        result.push(this.voidClass);
+        result.push(this.voidIconClass);
       }
       return result;
     },
 
     rateDisabled() {
       return this.disabled
-    },
-
-    voidClass() {
-      return this.rateDisabled ? this.disabledVoidIconClass : this.voidIconClass
-    },
-
-    activeClass() {
-      return this.rateDisabled ? this.disabledVoidColor : this.activeIconClass
     }
   },
 
   methods: {
-    getValueFromMap(value, map) {
-      const matchedKeys = Object.keys(map)
-        .filter((key) => {
-          const val = map[key]
-          const excluded = isObject(val) ? val.excluded : false
-          return excluded ? value < key : value <= key
-        })
-        .sort((a, b) => a - b)
-      const matchedValue = map[matchedKeys[0]]
-      return isObject(matchedValue) ? matchedValue.value : (matchedValue || '')
-    },
-    // 根据star的位置生成不同的颜色
+    // star的颜色
     getIconStyle(item) {
       const voidColor = this.rateDisabled ? this.disabledVoidColor : this.voidColor
+      const activeColor = this.rateDisabled ? this.disableActiveColor : this.activeColor
       return {
-        color: item <= this.currentValue ? this.activeColor : voidColor
+        color: item <= this.currentValue ? activeColor : voidColor
       }
-
     },
-    setCurrentValue(value, e) {
+    onMousemoveHandler(value, e) {
       if (this.rateDisabled) {
         return
       }
-
       if (this.allowHalf) {
         let target = e.target
-        // 定位到star icon，目的为为了获取鼠标在其上的位置
+        // 定位到star icon，目的是为了获取鼠标在其上的位置
         if (hasClass(target, 'el-rate__item')) {
           target = target.querySelector('.el-rate__icon')
         }
@@ -212,9 +188,10 @@ export default {
       } else {
         this.currentValue = value
       }
+      this.hoverIndex = value
     },
 
-    resetCurrentValue() {
+    onMouseleaveHandler() {
       if (this.rateDisabled) {
         return
       }
@@ -225,7 +202,7 @@ export default {
       this.hoverIndex = -1
     },
 
-    selectValue(value)  {
+    onclickHandler(value)  {
       if (this.rateDisabled) {
         return
       }
