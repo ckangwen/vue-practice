@@ -1,0 +1,44 @@
+.ivu-input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+  line-height: normal;
+}
+.prefix,
+.suffix {
+  display: block;
+  position: absolute;
+  width: 15px;
+  height: 22px;
+  background: black;
+  left: 0;
+  top:0;
+  z-index:1
+}
+.suffix {
+  left: auto;
+  right:0;
+  top:0;
+}
+.prefix {
+  left: 0;
+}
+.search-icon {
+  padding: 0 10px;
+  background: transparent;
+}
+input[disabled] {
+  background-color: #f3f3f3;
+  opacity: 1;
+  cursor: not-allowed;
+  color: #ccc;
+}
+.wordlimit {
+  font-size: .8rem;
+  color: #333333;
+  background: transparent;
+  width: auto;
+  padding-right: 3px;
+  line-height: 22px;
+}
