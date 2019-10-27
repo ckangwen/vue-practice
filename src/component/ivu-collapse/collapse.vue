@@ -43,7 +43,6 @@ export default {
     },
     getActivekey() {
       let activeKey = this.currentValue || []
-      console.log(activeKey)
       const accordion = this.accordion
 
       if (!Array.isArray(activeKey)) {
@@ -65,7 +64,9 @@ export default {
       let newActiveKey = []
 
       if (this.accordion) {
-
+        if (!data.isActive) {
+          newActiveKey.push()
+        }
       } else {
         let activeKey = this.getActivekey()
         const nameIndex = activeKey.indexOf(name)
