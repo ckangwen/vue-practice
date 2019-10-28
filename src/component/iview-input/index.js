@@ -1,4 +1,4 @@
-import { oneOf } from './util'
+import { oneOf, findComponentUpward } from './util'
 import Emitter from './emitter'
 import mixinForm from './mixinForm.js'
 export default {
@@ -75,6 +75,7 @@ export default {
     return {
       currentValue: this.value,
       showPassword: false,
+      isOnComposition: false,
       textareaStyles: {}
     }
   },
@@ -111,6 +112,7 @@ export default {
 
   methods: {
     handleInput (e) {
+      if (this.isOnComposition) return
       let value = e.target.value
       if (this.number && value !== '') {
         value = Number.isNaN(Number(value)) ? value : Number(value)
@@ -139,6 +141,9 @@ export default {
     },
     handleBlur (event) {
       this.$emit('on-blur', event)
+      if (!findComponentUpward(this, ['DatePicker', 'TimePicker', 'Cascader', 'Search'])) {
+        this.dispatch('FormItem', 'on-form-blur', this.currentValue)
+      }
     },
     handleSearch () {
       if (this.itemDisabled) {
@@ -154,6 +159,9 @@ export default {
         this.resizeTextarea()
       })
       this.currentValue = val
+      if (!findComponentUpward(this, ['DatePicker', 'TimePicker', 'Cascader', 'Search'])) {
+        this.dispatch('FormItem', 'on-form-change', val)
+      }
     },
     handleToggleShowPassword () {
       if (this.itemDisabled) {
@@ -165,7 +173,30 @@ export default {
     handleClear () {
       this.setCurrentValue('')
     },
+    handleComposition (e) {
+      if (e.type === 'compositionstart') {
+        this.isOnComposition = true
+      }
+      if (e.type === 'compositionend') {
+        this.isOnComposition = false
+        this.handleInput(e)
+      }
+    },
     resizeTextarea () {
+    },
+    focus () {
+      if (this.type === 'textarea') {
+        this.$refs.textarea.focus()
+      } else {
+        this.$refs.input.focus()
+      }
+    },
+    blur () {
+      if (this.type === 'textarea') {
+        this.$refs.textarea.blur()
+      } else {
+        this.$refs.input.blur()
+      }
     }
   },
   watch: {

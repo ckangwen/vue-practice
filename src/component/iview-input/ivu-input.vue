@@ -29,6 +29,9 @@
         @keydown="handleKeyDown"
         @focus="handleFocus"
         @blur="handleBlur"
+        @compositionstart="handleComposition"
+        @compositionupdate="handleComposition"
+        @compositionend="handleComposition"
       >
       <span v-if="suffix" class="suffix">
         <slot name="suffix"></slot>
