@@ -1,4 +1,4 @@
-import { oneOf, findComponentUpward } from './util'
+import { oneOf, findComponentUpward, calcTextareaHeight } from './util'
 import Emitter from './emitter'
 import mixinForm from './mixinForm.js'
 export default {
@@ -183,6 +183,13 @@ export default {
       }
     },
     resizeTextarea () {
+      const autosize = this.autosize
+      if (!autosize || this.type !== 'textarea') {
+        return false
+      }
+      const minRows = autosize.minRows
+      const maxRows = autosize.maxRows
+      this.textareaStyles = calcTextareaHeight(this.$refs.textarea, minRows, maxRows)
     },
     focus () {
       if (this.type === 'textarea') {

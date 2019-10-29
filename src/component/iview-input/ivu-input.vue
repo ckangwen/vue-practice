@@ -58,6 +58,9 @@
         @keydown="handleKeyDown"
         @focus="handleFocus"
         @blur="handleBlur"
+        @compositionstart="handleComposition"
+        @compositionupdate="handleComposition"
+        @compositionend="handleComposition"
       >
       </textarea>
      <span v-if="showWordLimit">{{currentTextLength}} / {{upperLimit}}</span>

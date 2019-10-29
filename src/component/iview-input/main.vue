@@ -4,7 +4,7 @@
   <!-- <ivu-input v-model="value"></ivu-input> -->
   <!-- <ivu-input v-model="value" placeholder="Enter something..." style="width: 200px" show-word-limit maxlength="10"></ivu-input> -->
   <!-- <ivu-input v-model="value" placeholder="Enter something..." style="width: 200px" clearable ></ivu-input> -->
-  <ivu-input search name="aaa" v-model="value"></ivu-input>
+  <ivu-input autosize type="textarea" v-model="value"></ivu-input>
 </div>
 </template>
 
