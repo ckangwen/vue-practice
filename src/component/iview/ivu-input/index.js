@@ -2,7 +2,7 @@ import { oneOf, findComponentUpward, calcTextareaHeight } from './util'
 import Emitter from './emitter'
 import mixinForm from './mixinForm.js'
 export default {
-  name: 'TestInput',
+  name: 'IvuInput',
   mixins: [Emitter, mixinForm],
   props: {
     name: {
