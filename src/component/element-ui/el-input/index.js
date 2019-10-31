@@ -1,6 +1,14 @@
 import Emitter from './emitter'
 export default {
   name: 'ElInput',
+  inject: {
+    elForm: {
+      default: ''
+    },
+    elFormItem: {
+      default: ''
+    }
+  },
   mixins: [Emitter],
   props: {
     value: [String, Number],
@@ -11,6 +19,10 @@ export default {
       default: ''
     },
     size: {
+      type: String,
+      default: ''
+    },
+    placeholder: {
       type: String,
       default: ''
     },
@@ -43,26 +55,29 @@ export default {
       return this.$parent.validating
     }
   },
+  methods: {
+    handleFocus () {
+      this.$emit('onfocus', this.currentValue)
+    },
+    handleBlur () {
+      this.$emit('onblur', this.currentValue)
+      this.dispatch('form-item', 'el.form.blur', [this.currentValue])
+    },
+    handleInput (event) {
+      this.currentValue = event.target.value
+    },
+    inputSelected () {
+      this.$refs.input.select()
+    }
+  },
   watch: {
-    value (val) {
+    'value' (val) {
       this.currentValue = val
     },
     currentValue (val) {
       this.$emit('input', val)
       this.$emit('onchange', val)
       this.dispatch('form-item', 'el.form.change', val)
-    }
-  },
-  methods: {
-    handleFocus (event) {
-      this.$emit('onfocus', this.currentValue)
-    },
-    handleBlur (event) {
-      this.$emit('onblur', this.currentValue)
-      this.dispatch('form-item', 'el.form.blur', [this.currentValue])
-    },
-    inputSelected () {
-      this.$refs.input.select()
     }
   },
   created () {

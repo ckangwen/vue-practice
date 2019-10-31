@@ -1,6 +1,9 @@
 <template>
   <div style="width: 250px;margin: 0 auto;">
-    <el-input v-model="value" icon="eleme"></el-input>
+    <el-input v-model="value">
+      <template slot="prepend">Http://</template>
+    </el-input>
+    <el-input v-model="value2" icon="eleme" @input="inputHandler"></el-input>
   </div>
 </template>
 
@@ -13,8 +16,14 @@ export default {
   },
   data() {
     return {
-      value: ''
+      value: '',
+      value2: ''
     }
   },
+  methods: {
+    inputHandler(val) {
+      console.log(val)
+    }
+  }
 }
 </script>
