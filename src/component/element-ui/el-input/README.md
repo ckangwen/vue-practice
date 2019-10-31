@@ -22,7 +22,7 @@ commitID: [a733f7835ee103dad58c88c3840f7aed4a6f7257](https://github.com/ElemeFE/
 
 
 
-### Input Sots
+### Input Slots
 
 无
 
@@ -226,3 +226,133 @@ methods: {
 在组件结构上有所改变，在输入控件的前后新增了前置内容与后置内容
 
 将input的双向数据绑定变化为单向数据绑定，父组件向下传递prop，子组件向上传递event。这样的单向数据流使得数据得以被追踪，源头容易追溯。
+
+
+
+## step 3
+
+### commitID: 4bdfcec9d74a1ed42728275b467b42ae7e9e6856
+
+添加input icon的点击事件
+
+
+
+### commitID: c14cb221cdc6ef18b6a242bea1a6b9da366de86e
+
+添加input的原生属性: form和autofocus
+
+
+
+### commitID: 547293e366dfa4d0374af0a63ccb61335b55579c
+
+支持min与max属性
+
+
+
+### commitID: 66442076689e23f7a0ee65128f110e1cb6c3813d
+
+修改触发blur事件时传入的参数:
+
+`this.$emit('blur', this.currentValue);` -> `this.$emit('blur', event);`
+
+
+
+### commitID: d9c78244708811be53afcce2e638676719fcec7e
+
+修改form validate的bug(#1363)
+
+[support deep object validate in form #1363](<https://github.com/ElemeFE/element/pull/1363>)
+
+- [ ] 阅读form-item的源代码，了解bug的起因
+
+```js
+// old
+computed: {
+  validating() {
+    return this.$parent.validating;
+  }
+}
+
+// new
+computed: {
+  validating() {
+    return this.$parent.validateState === 'validating';
+  }
+}
+```
+
+
+
+### commitID: ba983ffb9608a687fac092b530ccb8fc91fbf0c3
+
+normalize the componentName writing。为表单组件添加了`componentName`该属性
+
+并修改了向祖先组件传播事件时指定的组件名(因为dispatch方法中是根据组件的`componentName`属性向上查找的)
+
+```js
+// old
+handleBlur(event) {
+  this.dispatch('form-item', 'el.form.blur', [this.currentValue]);
+},
+'currentValue'（val）{
+  this.dispatch（'form-item'，'el.form.change'，[val]）;
+}
+
+// new
+handleBlur（event）{
+  this.dispatch（'ElFormItem'，'el.form.blur'，[this.currentValue]）;
+}，
+'currentValue'（val）{
+  this.dispatch（'ElFormItem'，'el.form.change'，[val]）;
+}
+```
+
+
+
+### commitID: db666dfb4b9eb294880914ac377852a38b8a2851
+
+修正input group的样式，将输入框前置内容、后置内容做了单独处理
+
+```js
+// old
+{
+	'is-disabled'：disabled，
+	'el-input-group'：$ slots.prepend ||$ slots.append
+}
+
+// new
+{
+  'is-disabled': disabled,
+  'el-input-group': $slots.prepend || $slots.append,
+  'el-input-group--append': $slots.append,
+  'el-input-group--prepend': $slots.prepend
+}
+```
+
+对原先icon的class三元表达式的冗余写法进行修改
+
+```vue
+// old
+<i class="el-input__icon" :class="[icon ? 'el-icon-' + icon : '']" v-if="icon" @click="handleIconClick"></i>
+// new
+<i class="el-input__icon" :class="'el-icon-' + icon" v-if="icon" @click="handleIconClick"></i>
+```
+
+
+
+### commitID: 55dfb0c296aab84776a6533752ed92ce07d4ee61
+
+将input图标转变为插槽的形式，并设置后备内容
+
+#### Input Slots
+
+- prepend
+- append
+- icon
+
+```vue
+<slot name="icon">
+  <i class="el-input__icon" :class="'el-icon-' + icon" v-if="icon" @click="handleIconClick"></i>
+</slot>
+```
+
