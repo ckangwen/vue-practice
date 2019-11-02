@@ -1,14 +1,6 @@
 import Emitter from './emitter'
 export default {
   name: 'ElInput',
-  inject: {
-    elForm: {
-      default: ''
-    },
-    elFormItem: {
-      default: ''
-    }
-  },
   mixins: [Emitter],
   props: {
     value: [String, Number],
@@ -42,12 +34,19 @@ export default {
       type: String,
       default: ''
     },
+    step: Number,
     maxlength: Number,
-    minlength: Number
+    minlength: Number,
+    max: Number,
+    min: Number,
+    validateEvent: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
-      currentValue: ''
+      currentValue: this.value
     }
   },
   computed: {
@@ -59,25 +58,55 @@ export default {
     handleFocus () {
       this.$emit('onfocus', this.currentValue)
     },
-    handleBlur () {
-      this.$emit('onblur', this.currentValue)
-      this.dispatch('form-item', 'el.form.blur', [this.currentValue])
+    handleBlur (event) {
+      this.$emit('onblur', event)
+      if (this.validateEvent) {
+        this.dispatch('ElFormItem', 'el.form.blur', [this.currentValue])
+      }
     },
+    // handleInput (event) {
+    //   const value = event.target.value
+    //   this.$emit('input', value)
+    //   this.setCurrentValue(event.target.value)
+    //   this.$emit('change', value)
+    // },
     handleInput (event) {
-      this.currentValue = event.target.value
+      this.setCurrentValue(event.target.value)
     },
     inputSelected () {
       this.$refs.input.select()
+    },
+    handleIconClick (event) {
+      if (this.onIconClick) {
+        this.onIconClick(event)
+      }
+      this.$emit('click', event)
+    },
+    // setCurrentValue (value) {
+    //   if (value === this.currentValue) return
+    //   this.currentValue = value
+    //   if (this.validateEvent) {
+    //     this.dispatch('ElFormItem', 'el.form.change', [value])
+    //   }
+    // }
+    setCurrentValue (value) {
+      if (value === this.currentValue) return
+      this.currentValue = value
+      this.$emit('input', value)
+      this.$emit('change', value)
+      if (this.validateEvent) {
+        this.dispatch('ElFormItem', 'el.form.change', [value])
+      }
     }
   },
   watch: {
     'value' (val) {
-      this.currentValue = val
+      this.setCurrentValue(val)
     },
     currentValue (val) {
       this.$emit('input', val)
       this.$emit('onchange', val)
-      this.dispatch('form-item', 'el.form.change', val)
+      this.dispatch('ElFormItem', 'el.form.change', val)
     }
   },
   created () {

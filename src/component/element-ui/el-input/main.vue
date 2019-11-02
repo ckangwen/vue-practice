@@ -4,6 +4,7 @@
       <template slot="prepend">Http://</template>
     </el-input>
     <el-input v-model="value2" icon="eleme" @input="inputHandler"></el-input>
+    <span>{{value}}</span>
   </div>
 </template>
 
