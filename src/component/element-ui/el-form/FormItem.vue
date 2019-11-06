@@ -73,7 +73,7 @@ export default {
     contentStyle() {
       const result = {}
       const label = this.label
-      if (!label && !this.labelWidth && this.isNested) return result
+      if (!label && !this.labelWidth) return result
       const labelWidth = this.labelWidth || this.form.labelWidth
       result.marginLeft = labelWidth
       return result
@@ -82,9 +82,6 @@ export default {
       let parent = this.$parent
       let parentName = parent.$options.name
       while (parentName !== 'ElForm') {
-        if (parentName !== 'ElFormItem') {
-          this.isNested = true
-        }
         parent = parent.$parent
         parentName = parent.$options.name
       }
@@ -92,7 +89,6 @@ export default {
     },
     fieldValue() {
       const model = this.form.model
-      console.log('model', model)
       if (!model || !this.prop) return
       let path = this.prop
       return getPropByPath(model, path, true).v
@@ -143,7 +139,6 @@ export default {
         // 发布validate事件
         this.elForm && this.elForm.$emit('validate', this.prop, !errors, this.validateMessage || null)
       })
-      console.log(this.fieldValue)
     },
     getRules() {
       let formRules = this.form.rules
@@ -180,6 +175,43 @@ export default {
       }
 
       this.validate('change')
+    },
+    clearValidate() {
+      // 清除校验信息
+      this.validateState = ''
+      this.validateMessage = ''
+      this.validateDisabled = false
+    },
+    resetField() {
+      this.validateState = ''
+      this.validateMessage = ''
+
+
+      // 表单数据对象
+      let model = this.form.model
+      // 根据表单数据对象与表单域model字段获取校验规则: getPropByPath(model, this.prop, true).v
+      let value = this.fieldValue
+      let path = this.prop
+      if (path.indexOf(':') !== -1) {
+        path = path.replace(/:/, '.')
+      }
+
+      let prop = getPropByPath(model, path, true)
+
+      this.validateDisabled = true
+      if (Array.isArray(value)) {
+        prop.o[prop.k] = [].concat(this.initialValue)
+      } else {
+        // * prop.o => Observer(响应式) => 表单数据对象(eg:{user: ''})
+        // * prop.k => 当前验证的表单字段 => eg:user
+        // * initialValue在mounted阶段就已设置，值为this.fieldValue，并将该属性挂载到当前组件实例
+        prop.o[prop.k] = this.initialValue
+      }
+
+      // reset validateDisabled after onFieldChange triggered
+      this.$nextTick(() => {
+        this.validateDisabled = false;
+      })
     },
   },
   mounted() {

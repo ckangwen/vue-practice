@@ -1,14 +1,18 @@
 <template>
 <div>
-  <el-form :model="formInline" :rules="rules">
+  <el-form :model="formInline" :rules="rules" ref="ruleForm">
     <el-form-item label="审批人" prop="user">
       <el-input v-model="formInline.user" placeholder="审批人"></el-input>
     </el-form-item>
     <el-form-item label="活动区域" prop="region">
       <el-input v-model="formInline.region" placeholder="活动区域"></el-input>
     </el-form-item>
+    <el-form-item label="年龄" prop="age">
+      <el-input v-model.number="formInline.age" placeholder="年龄"></el-input>
+    </el-form-item>
     <el-form-item>
-      <button @submit.native="onSubmit">submit</button>
+      <button type="button" @click="clear">clearValidate</button>
+      <button type="button" @click="reset">resetFields</button>
     </el-form-item>
   </el-form>
 </div>
@@ -28,7 +32,7 @@ export default {
   data() {
     return {
       formInline: {
-        user: '',
+        user: '1',
         region: ''
       },
       rules: {
@@ -48,13 +52,21 @@ export default {
           required: true,
           message: '请选择活动区域',
           trigger: 'blur'
+        }],
+        age: [{
+          required: true,
+          message: '请输入正确的年龄',
+          trigger: 'blur'
         }]
       }
     }
   },
   methods: {
-    onSubmit() {
-      console.log('submit!');
+    clear() {
+      this.$refs.ruleForm.clearValidate('user')
+    },
+    reset() {
+      this.$refs.ruleForm.resetFields()
     }
   }
 }
